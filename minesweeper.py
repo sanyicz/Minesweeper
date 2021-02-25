@@ -1,7 +1,7 @@
 from random import randint
 import numpy as np
 import tkinter as tk
-from PIL import ImageTk, Image
+##from PIL import ImageTk, Image
 
 class MineSweeper(tk.Frame): #class inheritance
     def __init__(self, parentWindow):
