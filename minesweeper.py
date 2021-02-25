@@ -1,7 +1,6 @@
 from random import randint
 import numpy as np
 import tkinter as tk
-##from PIL import ImageTk, Image
 
 class MineSweeper(tk.Frame): #class inheritance
     def __init__(self, parentWindow):
@@ -10,9 +9,6 @@ class MineSweeper(tk.Frame): #class inheritance
 
         self.gameState = '0' #1 if a game is started (New game), else 0
         self.colors = {'' : 'black', 0 : 'black', 1 : 'blue', 2 : 'green', 3 : 'orange', 4 : 'red', 5 : 'violet red'}
-##        image = Image.open('mine.png')
-##        image = image.resize((1000, 1000))
-##        self.mineImage = ImageTk.PhotoImage(image)
         
         self.menu = tk.Frame(self.window, borderwidth=2, relief='ridge', width=100) #frame for the settings menu
         self.menu.grid(row=0, column=0)
@@ -113,7 +109,7 @@ class MineSweeper(tk.Frame): #class inheritance
                         else:
                             symbol = symbol
                         color = self.colors[symbol]
-                    tileLabel = tk.Label(self.gamefield, text=symbol, font=('Helvetica 8 bold'), height=2, width=4, borderwidth=2, relief='ridge', fg=color)
+                    tileLabel = tk.Label(self.gamefield, text=symbol, font=('Helvetica 9 bold'), height=2, width=4, borderwidth=2, relief='ridge', fg=color)
                     tileLabel.grid(row=i, column=j)
                     self.tileLabels[i].append(tileLabel)
                     buttonLabel = tk.Label(self.gamefield, height=2, width=4, borderwidth=2, relief='raised')
