@@ -1,6 +1,7 @@
 from random import randint
 import numpy as np
 import tkinter as tk
+from PIL import ImageTk, Image
 
 class MineSweeper(tk.Frame): #class inheritance
     def __init__(self, parentWindow):
@@ -8,6 +9,10 @@ class MineSweeper(tk.Frame): #class inheritance
         self.window = parentWindow #?
 
         self.gameState = '0' #1 if a game is started (New game), else 0
+        self.colors = {'' : 'black', 0 : 'black', 1 : 'blue', 2 : 'green', 3 : 'orange', 4 : 'red', 5 : 'violet red'}
+##        image = Image.open('mine.png')
+##        image = image.resize((1000, 1000))
+##        self.mineImage = ImageTk.PhotoImage(image)
         
         self.menu = tk.Frame(self.window, borderwidth=2, relief='ridge', width=100) #frame for the settings menu
         self.menu.grid(row=0, column=0)
@@ -103,8 +108,12 @@ class MineSweeper(tk.Frame): #class inheritance
                         color = 'red'
                     else:
                         symbol = self.field[i][j]
-                        color = 'black'
-                    tileLabel = tk.Label(self.gamefield, text=symbol, height=2, width=4, borderwidth=2, relief='ridge', fg=color)
+                        if symbol == 0:
+                            symbol = ''
+                        else:
+                            symbol = symbol
+                        color = self.colors[symbol]
+                    tileLabel = tk.Label(self.gamefield, text=symbol, font=('Helvetica 8 bold'), height=2, width=4, borderwidth=2, relief='ridge', fg=color)
                     tileLabel.grid(row=i, column=j)
                     self.tileLabels[i].append(tileLabel)
                     buttonLabel = tk.Label(self.gamefield, height=2, width=4, borderwidth=2, relief='raised')
@@ -124,7 +133,7 @@ class MineSweeper(tk.Frame): #class inheritance
             for j in range(col-1, col+2):
                 if i>=0 and j>=0: #lower bound for the tile coordinates
                     try: #upper bound for the tile coordinates: only if an adjacent tile exists
-                        if self.tileLabels[i][j]['text']=='0' and self.buttonLabels[i][j].winfo_exists()==1:
+                        if self.tileLabels[i][j]['text']=='' and self.buttonLabels[i][j].winfo_exists()==1:
                             self.buttonLabels[i][j].destroy()
                             self.tilesClicked.set(self.tilesClicked.get()+1) #increase the number of clicked on tiles by 1
                             self.neighbourCells(i, j) #if an adjacent tile also contains 0, call the method again
@@ -141,7 +150,7 @@ class MineSweeper(tk.Frame): #class inheritance
             event.widget.destroy() #show the tile under the button
             if self.tileLabels[row][col]['text']=='M': #if a mine is clicked, the game is over, you lost
                 self.gameOver()
-            if self.tileLabels[row][col]['text']=='0': #if an isolated tile is clicked
+            if self.tileLabels[row][col]['text']=='': #if an isolated tile is clicked
                 self.neighbourCells(row, col)
             self.tilesClicked.set(self.tilesClicked.get()+1) #increase the number of clicked on tiles by 1
             if self.tilesClicked.get() == self.notMines and self.minesLeft.get() == 0: #win condition: every bomb is marked and every other tile is showed (left clicked on)
