@@ -18,12 +18,12 @@ class MineSweeper(tk.Frame): #class inheritance
         self.numberOfMines.set(20)
         tk.Entry(self.menu, textvariable=self.numberOfMines, width=10).grid(row=0, column=1)
         
-        tk.Label(self.menu, text='Field width').grid(row=1, column=0) #width parameter of the playing field
+        tk.Label(self.menu, text='Field width').grid(row=1, column=0) #width parameter of the playing field (number of blocks horizontally)
         self.fieldWidth = tk.IntVar()
         self.fieldWidth.set(10)
         tk.Entry(self.menu, textvariable=self.fieldWidth, width=10).grid(row=1, column=1)
         
-        tk.Label(self.menu, text='Field height').grid(row=2, column=0) #height parameter of the playing field
+        tk.Label(self.menu, text='Field height').grid(row=2, column=0) #height parameter of the playing field (number of blocks vertically)
         self.fieldHeight = tk.IntVar()
         self.fieldHeight.set(10)
         tk.Entry(self.menu, textvariable=self.fieldHeight, width=10).grid(row=2, column=1)
@@ -41,7 +41,7 @@ class MineSweeper(tk.Frame): #class inheritance
         self.gamefield.grid(row=1, column=0)
         self.gameState = '1'
         
-        grid_i, grid_j = self.fieldHeight.get(), self.fieldWidth.get() #gather the necessary data from the menu field
+        grid_i, grid_j = self.fieldHeight.get(), self.fieldWidth.get() #gather the necessary data from the menu field settings
         n_mines = self.numberOfMines.get()
         
         if n_mines <= grid_i * grid_j: #if there are less mines than tiles on the field
@@ -92,7 +92,7 @@ class MineSweeper(tk.Frame): #class inheritance
                                         pass
             #print(self.field)
 
-            #create the gui
+            #create the playing field (takes too long!)
             self.tileLabels = [] #labels for the tiles with the mines and numbers on them
             self.buttonLabels = [] #buttons that hide the tiles
             for i in range(grid_i):
@@ -140,7 +140,7 @@ class MineSweeper(tk.Frame): #class inheritance
                         pass
 
     def buttonLeftClick(self, event):
-        #left click: shows the tile under the bottom
+        #left click event: shows the tile under the bottom
         row, col = event.widget.grid_info()['row'], event.widget.grid_info()['column'] #get the coordinates of the widget that has been clicked on
         if self.gameState == '1' and self.buttonLabels[row][col]['text']!='M': #if a game is running and the tile is not marked for mine
             event.widget.destroy() #show the tile under the button
@@ -153,7 +153,7 @@ class MineSweeper(tk.Frame): #class inheritance
                 self.gameWon()
 
     def buttonRightClick(self, event):
-        #right click: marks or unmarks the tile for mine (writes or erases 'M' on the button)
+        #right click event: marks or unmarks the tile for mine (writes or erases 'M' on the button)
         if self.gameState == '1':
             row, col = event.widget.grid_info()['row'], event.widget.grid_info()['column'] #get the coordinates of the widget that has been clicked on
             if self.buttonLabels[row][col]['text']=='' and  self.minesLeft.get()>=1: #mark only if the button is not marked and there are still mines left to mark
@@ -167,7 +167,7 @@ class MineSweeper(tk.Frame): #class inheritance
                 
     def gameWon(self):
         #method called when the game is won
-        #win condition: every bomb is marked and every other tile is showed (left clicked on)
+        #win condition: every bomb is marked and every other tile is showed (left clicked)
         print('You won')
         self.gameState = '0'
         gameWon = tk.Toplevel() #message window
@@ -175,7 +175,7 @@ class MineSweeper(tk.Frame): #class inheritance
         gameWon.grab_set() #blocks the main window until message window is closed
         
     def gameOver(self):
-        #method called when a mine (a 'M') is left clicked
+        #method called when a mine is found (an 'M' is left clicked)
         print('Game over')
         self.gameState = '0'
         gameOver = tk.Toplevel() #message window
@@ -187,6 +187,6 @@ class MineSweeper(tk.Frame): #class inheritance
 
 
 if __name__ == '__main__':
-    root = tk.Tk()
-    MineSweeper = MineSweeper(root).grid(row=0, column=0)
+    root = tk.Tk() #create a window
+    MineSweeper = MineSweeper(root).grid(row=0, column=0) #place the app in the window (as a tk.Frame)
     root.mainloop()
